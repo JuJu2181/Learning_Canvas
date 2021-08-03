@@ -1,0 +1,14 @@
+/* resets */
+*,body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* some styling for canvas */
+canvas{
+    border: 1px solid #000;
+    /** proper resizing is done from js not using css for canvas */
+    /* height: 100%;
+    width: 100%; */
+}
