@@ -11,16 +11,8 @@ canvas.height = height;
 
 let ctx = canvas.getContext('2d');
 
-// function to generate random colors 
-// const getRandomColor = () => {
-//     // random integer between  0 and 255
-//     let random_color1 = Math.floor(Math.random() * (255-1)+1);
-//     let random_color2 = Math.floor(Math.random() * (255-1)+1);
-//     let random_color3 = Math.floor(Math.random() * (255-1)+1);
-//     console.log(`1: ${random_color1}\n2:${random_color2}\n3:${random_color3}`);
-//     let randomColor = `rgba(${random_color1},${random_color2},${random_color3})`;
-//     return randomColor;
-// }
+let ballSound = new Audio('ball_sound.mp3');
+
 
 // variables for circle animation
 // these variables are static and same for all circles
@@ -29,7 +21,7 @@ let endAngle = Math.PI * 2;
 let isAnticlockwise = false;
 let maxRadius = 50;
 let defRadius = 10;
-let circlesCount = 50;
+let circlesCount = 1;
 // gravity
 let gravity = 1;
 let friction = 0.95;
@@ -71,11 +63,14 @@ class Ball {
             // when ball bounces down it will bounce up 
             // here we include friction so that the ball will eventually slow down and stop 
             this.dy = -this.dy * friction;
+            if (this.y < canvas.height - this.radius-this.dy) {
+                console.log('sound played');
+                    ballSound.play();
+            }
         } else {
             // once the ball bounces up it will again fall due to gravity
             this.dy += gravity;
         }
-
         // to avoid ball to slip away from left and right under affect of horizontal velocity
         // here if this.dx is not added when checking condition then balls get stuck at righht during rest
         if (this.x + this.radius + this.dx> canvas.width || this.x - this.radius < 0) {
