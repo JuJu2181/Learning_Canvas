@@ -1,6 +1,6 @@
 // imports from other modules
 import utils from './utils.js';
-import { Circle } from './circle.js';
+import { SmallParticle } from './circle.js';
 
 // dom selectors
 let canvas = document.querySelector('canvas');
@@ -18,40 +18,45 @@ const mouse = {
 };
 
 // variables used in functions
-let circle1, circle2;
-let oldColor;
+let particles;
+let particlesCount = 50;
+
 // functions
 const init = () => {
     // init code here
-    circle1 = new Circle(300, 300, 0, 0, 70, 'skyblue');
-    circle2 = new Circle(20, 20, 0, 0, 30, 'orange');
-    oldColor = circle1.color;
+
+    particles = [];
+    for (let i = 0; i < particlesCount; i++) {
+        let x = canvas.width / 2;
+        let y = canvas.height / 2;
+        // to get random radius from 1 to 3
+        let radius = (Math.random()*3)+1;
+        let color = utils.getRandomColor();
+        particles.push(new SmallParticle(x,y,radius,color));
+    }
 }
 
 const animate = () => {
     // to call animation function recursively
     requestAnimationFrame(animate);
     // to clear the canvas for each draw
-    ctx.clearRect(0,0,canvas.width,canvas.height);
+    // TODO: Here if we comment clear rect as the previous circles are not cleared so we get a cool donut like spinner
+    // ctx.clearRect(0,0,canvas.width,canvas.height);
+    // ! as we need a trail effect for our animation instead of using clear rect we use fillRect as below 
+    // here use of alpha value will make the trail transparent
+    ctx.fillStyle = 'rgba(0,0,0,0.05)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
     // animation code here
-    circle1.update(ctx);
-    circle2.x = mouse.x;
-    circle2.y = mouse.y;
-    circle2.update(ctx);
-    // if the distance between the center of two circles is less than the sum of radii of two circles it means the circles are colliding
-    if (utils.getDistance(circle1.x, circle1.y, circle2.x, circle2.y) <= circle1.radius + circle2.radius) {
-        console.log('Collision detected');
-        circle1.color = circle2.color;
-        document.getElementById('screenTitle').innerHTML = "Collided";
-    } else {
-        circle1.color = oldColor;
-        document.getElementById('screenTitle').innerHTML = "Collision Effect 1";
-    }
+
+    particles.forEach(particle => {
+        particle.update(ctx,mouse);
+    });
+    
 }
 
 // event listeners
 window.onload = () => {
-    console.log('Collision Effect in Canvas');
+    console.log('Circular Motion Effect in Canvas');
     init();
     animate();
 }

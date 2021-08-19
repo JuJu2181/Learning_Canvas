@@ -66,11 +66,13 @@ export class Particle {
         // for mouse collision detection with circles
         if (utils.getDistance(mouse.x, mouse.y, this.x, this.y) <= 150 && this.opacity < 0.7) {
             this.opacity += 0.04;
+            this.radius = this.radius+0.2;
         }else if(this.opacity > 0){
             // to restore to 0 opacity we need to restore the opacity to default 
             this.opacity -= 0.04;
             // here the opacity cannot, should not and will not go below 0
             this.opacity = Math.max(0, this.opacity);
+            this.radius = this.radius-0.2;
         }
         // when these particles hit box boundary they will move in opposite direction
         if (this.x - this.radius <= 0 || this.x + this.radius >= canvas.width) {
